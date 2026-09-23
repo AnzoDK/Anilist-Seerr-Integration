@@ -1,4 +1,4 @@
-# Anilist-Seer-Integration
+# Anilist-Seerr-Integration
 
 
 
