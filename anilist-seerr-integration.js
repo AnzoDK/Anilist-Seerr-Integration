@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       https://anilist.co/*
 // @grant GM.xmlHttpRequest 
-// @version     0.0.3
+// @version     0.0.4
 // @author      AnzoDK
 // @license     MIT
 // @description 23/09/2026, 13.21.43
@@ -34,6 +34,7 @@ function addBadge(entryNode, status, url)
     statusA.style = "position:absolute;z-index:10000;font-size:15px;background-color:#0b1622;border-radius: 10px 10px 10px 10px;padding:3px;";
     statusA.classList.add("seerr-badge-symbol");
     statusA.href = url;
+    statusA.target = "_blank";
 
     switch(status)
     {
