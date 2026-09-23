@@ -7,8 +7,8 @@
 // @author      AnzoDK
 // @license     MIT
 // @description 23/09/2026, 13.21.43
-// @downloadURL https://github.com/AnzoDK/Anilist-Toggle-Scores/releases/latest/download/toggle_anilist_scores.js
-// @updateURL   https://github.com/AnzoDK/Anilist-Toggle-Scores/releases/latest/download/toggle_anilist_scores.js
+// @downloadURL https://github.com/AnzoDK/Anilist-Seerr-Integration/releases/latest/download/anilist-seerr-integration.js
+// @updateURL   https://github.com/AnzoDK/Anilist-Seerr-Integration/releases/latest/download/anilist-seerr-integration.js
 // ==/UserScript==
 
 //ENUM
