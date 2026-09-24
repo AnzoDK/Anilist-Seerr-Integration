@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       https://anilist.co/*
 // @grant GM.xmlHttpRequest 
-// @version     0.0.4
+// @version     0.0.5
 // @author      AnzoDK
 // @license     MIT
 // @description 23/09/2026, 13.21.43
@@ -20,7 +20,7 @@ const SEERR_STATUS =
     "PROCESSING": 3,
     "PARTIALLY_AVAILABLE": 4,
     "AVAILABLE": 5,
-    "DELETED": 6,
+    "DELETED": 7,
     "NOT_FOUND": 99 //Not from seerr, but fits here
 };
 
@@ -89,7 +89,7 @@ function intToSeerStatus(num)
             return SEERR_STATUS.PARTIALLY_AVAILABLE;
         case 5:
             return SEERR_STATUS.AVAILABLE;
-        case 6:
+        case 7:
             return SEERR_STATUS.DELETED;
         default:
             return SEERR_STATUS.NOT_FOUND;
@@ -190,6 +190,8 @@ class LibSeerr
         };
 
         name = encodeURIComponent(name);
+        name = name.replace(/\(/g, "%28").replace(/\)/g, "%29"); //Fix "(" and ")" which seerr dislikes
+        name = name.replace(/\!/g, "%21"); //fix "!"
 
         let response = await GM.xmlHttpRequest({ method: "GET", url: this._getApiBase() + "/search?query=" + name, headers: headers});
         return { "reachable": response.status == 200, "statusCode": response.status, data: await response.responseText};
@@ -421,19 +423,19 @@ function ProcessNode(entryNode)
             let node = entryNode;
             seerrLib.lookup(title).then(function (value) {
 
-                let seerrResponseStatus = SEERR_STATUS.NOT_FOUND;
 
-                logger.LogObject(node);
-                //logger.LogObject(value);
                 let seerrResponseData = JSON.parse(value.data);
                 if(seerrResponseData.hasOwnProperty("results"))
                 {
                     if(seerrResponseData.results.length == 0)
                     {
                         logger.Warn(title + " was not found in seerr");
-                        addBadge(node,SEERR_STATUS.NOT_FOUND);
+                        addBadge(node,SEERR_STATUS.NOT_FOUND,"#");
                         return;
                     }
+
+                    //logger.LogObject(seerrResponseData.results);
+
                     let id = seerrResponseData.results[0].id;
                     let type = (seerrResponseData.results[0].hasOwnProperty("mediaInfo")) ? seerrResponseData.results[0].mediaInfo.mediaType : seerrResponseData.results[0].mediaType;
                     let seerrUrl = seerrLib.urlBase + "/" + type + "/" + id;
@@ -445,7 +447,8 @@ function ProcessNode(entryNode)
                 }
                 else
                 {
-                    logger.Warn(title + " caused an error in Seerr - Request failed");
+                    logger.Warn(title + " caused an error in Seerr - Request failed - Err: ");
+                    logger.LogObject(seerrResponseData);
                 }
             });
 }
